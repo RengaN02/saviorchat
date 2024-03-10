@@ -1,2 +1,0 @@
-# saviorchat
-Socketio Chat Example
