@@ -1,0 +1,14 @@
+{
+  "name": "xir-chat-example",
+  "version": "0.0.1",
+  "description": "Xir Tarafından Editlenmiştir",
+  "dependencies": {
+    "express": "^4.17.1",
+    "socket.io": "^3.0.3",
+    "wio.db": "^4.0.22"
+  },
+  "scripts": {
+    "start": "node index.js"
+  },
+  "license": "MIT"
+}
