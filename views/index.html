@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+  <link
+    rel="stylesheet"
+    href="//use.fontawesome.com/releases/v5.0.7/css/all.css"
+  />
+  <head>
+    <title>Xir Chat Example</title>
+    <style>
+      body {
+        margin: 0;
+        background: #23272a;
+        padding-bottom: 3rem;
+      }
+
+      #form {
+        background: #1c1f21;
+        padding: 0.25rem;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        display: flex;
+        height: 3rem;
+        box-sizing: border-box;
+        backdrop-filter: blur(10px);
+      }
+      #input {
+        border: none;
+        padding: 0 1rem;
+        flex-grow: 1;
+        border-radius: 2rem;
+        margin: 0.25rem;
+      }
+      #input:focus {
+        outline: none;
+      }
+      #username {
+        border: none;
+        padding: 0 1rem;
+        flex-grow: 0.1;
+        border-radius: 1rem;
+        margin: 0.25rem;
+      }
+      #username:focus {
+        outline: none;
+      }
+      #form > button {
+        background: #d49818;
+        border: none;
+        padding: 0 1rem;
+        margin: 0.25rem;
+        border-radius: 3px;
+        outline: none;
+        color: #000;
+      }
+
+      #messages {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+      }
+      #messages > li {
+        padding: 0.5rem 1rem;
+        color: #fff;
+      }
+      #messages > li:nth-child(odd) {
+        background: #101010;
+      }
+
+      h3,
+      a {
+        color: #d49818;
+      }
+      h3,
+      a:hover {
+        text-decoration: none;
+        color: #d49818;
+      }
+    </style>
+  </head>
+  <body>
+    <h3 style="margin-left: 15px">Chat Example By Rengan</h3>
+
+    <ul id="messages"></ul>
+    <form id="form" action="">
+      <input
+        id="input"
+        autocomplete="off"
+        maxlength="1500"
+        placeholder="Write message"
+      />
+      <input
+        id="username"
+        autocomplete="off"
+        maxlength="10"
+        placeholder="Username"
+      />
+      <button><i class="far fa-paper-plane"></i></button>
+    </form>
+    <script src="/socket.io/socket.io.js"></script>
+
+    <script>
+      var socket = io();
+      socket.emit("letsconnect", true)
+
+      var messages = document.getElementById("messages");
+      var form = document.getElementById("form");
+      var input = document.getElementById("input");
+      var username = document.getElementById("username");
+
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        if (input.value && username.value) {
+          socket.emit("chat message", input.value, username.value);
+          input.value = "";
+        } else {
+          var it = document.createElement("li");
+          it.style.color = "red";
+          if (!input.value) {
+            it.innerHTML = "You need to write a message";
+          }
+          if (!username.value) {
+            it.innerHTML = "You need to an username for texting mesages";
+          }
+          messages.appendChild(it);
+          window.scroolTo(0, document.body.scroolHeight);
+        }
+      });
+
+      socket.on("chat message", function (msg, usr) {
+        var item = document.createElement("li");
+
+        item.innerHTML = `<b>${usr}:</b> ${msg}`;
+        messages.appendChild(item);
+        window.scrollTo(0, document.body.scrollHeight);
+      });
+    </script>
+  </body>
+</html>
